@@ -1034,6 +1034,38 @@ class Handler(BaseHTTPRequestHandler):
                 self.server.store.release_source(owner_id)
                 self._send(204, b"", "application/json")
                 return
+            # AI proxy: OpenAI-compatible forwarding (user-configured provider)
+            if parsed.path == "/api/ai/chat":
+                # Small JSON, no job slot needed (avoid blocking codec)
+                body = self._body(64 * 1024)
+                request = decoded_json(body)
+                if not isinstance(request, dict):
+                    raise ApiError(400, "invalid_request", "The request must be a JSON object.")
+                try:
+                    import ai_service as ai_svc
+                except ImportError:
+                    # fallback if module not on path when run from different cwd
+                    import importlib.util, pathlib
+                    spec = importlib.util.spec_from_file_location("ai_service", str(pathlib.Path(__file__).parent / "ai_service.py"))
+                    ai_svc = importlib.util.module_from_spec(spec)
+                    spec.loader.exec_module(ai_svc)
+                try:
+                    data = ai_svc.forward_chat(
+                        base_url=request.get("baseUrl") or request.get("base_url") or "",
+                        model=request.get("model") or "",
+                        api_key=request.get("apiKey") or request.get("api_key") or "",
+                        messages=request.get("messages") or [],
+                        temperature=request.get("temperature", 0.7),
+                        max_tokens=request.get("maxTokens") or request.get("max_tokens") or 1500,
+                    )
+                    self._json(200, data)
+                except Exception as e:
+                    # Surface upstream error as 502/400
+                    msg = str(e)
+                    if "LLM upstream" in msg:
+                        raise ApiError(502, "ai_upstream", msg)
+                    raise ApiError(400, "ai_error", msg)
+                return
             if parsed.path not in ("/api/import", "/api/open", "/api/export", "/api/source/retain"):
                 raise ApiError(404, "route_not_found", "Unknown codec endpoint.")
             with self._job():

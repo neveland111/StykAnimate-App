@@ -17,6 +17,8 @@ import {normalizeExportPreferences} from './export-request.mjs';
 
 import { normalizeFingerDraw, normalizeTouchSetting } from './touch/touch-mode.mjs';
 
+import { normalizeAIProviders } from './ai-provider.mjs';
+
 export const EDITOR_SETTINGS_KEY = "stykanimate.editor.settings.v1";
 export const DEFAULT_EDITOR_SETTINGS = Object.freeze({
   locale: "en",
@@ -101,6 +103,10 @@ export const DEFAULT_EDITOR_SETTINGS = Object.freeze({
   homeSort: "recent",
   // The tutorials a person finished (docs/TUTORIALS.md), by id.
   tutorialsDone: Object.freeze([]),
+  // AI Animation (docs/AI-GENERATION.md): user-configured OpenAI-compatible providers.
+  // Stored locally (localStorage / desktop prefs), never sent to telemetry.
+  aiProviders: Object.freeze([]),
+  aiActiveProviderId: null,
 });
 const TUTORIAL_ID = /^[a-z][a-z0-9-]{0,39}$/;
 /** The finished tutorials as a short list of well-formed ids, each once. */
@@ -197,6 +203,15 @@ export function normalizeEditorSettings(value = {}) {
   if (['grid', 'list'].includes(value?.homeLayout)) result.homeLayout = value.homeLayout;
   if (['recent', 'name', 'modified'].includes(value?.homeSort)) result.homeSort = value.homeSort;
   result.tutorialsDone = normalizeTutorialsDone(value?.tutorialsDone);
+  // AI providers: user-configured OpenAI-compatible endpoints (Settings → AI)
+  try {
+    const providers = normalizeAIProviders(value?.aiProviders);
+    result.aiProviders = providers;
+    let activeId = typeof value?.aiActiveProviderId === 'string' ? value.aiActiveProviderId : null;
+    if (activeId && !providers.some(p => p.id === activeId)) activeId = null;
+    if (!activeId && providers.length) activeId = providers[0].id;
+    result.aiActiveProviderId = activeId;
+  } catch { result.aiProviders = DEFAULT_EDITOR_SETTINGS.aiProviders; result.aiActiveProviderId = null; }
   return result;
 }
 const escape = (value) =>
@@ -214,6 +229,7 @@ const TABS = [
   ["canvas", "frame", "library"],
   ["animation", "play", "time"],
   ["shortcuts", "keyboard", "camera"],
+  ["ai", "lightbulb", "select"],
 ];
 const FEEDBACK_TAB = ["feedback", "message", "draw"];
 /** The tabs the sidebar search looks through (Shortcuts has its own search). */
@@ -426,6 +442,122 @@ export class EditorSettings {
         localizedText(this.content.querySelector("[data-handle-value]"), 'settings.sizePx', {size: size});
         fillSlider(event.target);
       }
+    });
+    // AI provider management (Settings → AI) - user adds custom provider/model/baseUrl
+    this.dialog.addEventListener("click", async (event) => {
+      const selectBtn = event.target.closest('[data-ai-select]');
+      if (selectBtn) {
+        event.stopPropagation();
+        this.commit({ aiActiveProviderId: selectBtn.dataset.aiSelect });
+        if (this.tab === 'ai') this.render();
+        return;
+      }
+      const delBtn = event.target.closest('[data-ai-delete]');
+      if (delBtn) {
+        event.stopPropagation();
+        const id = delBtn.dataset.aiDelete;
+        const next = (this.value.aiProviders || []).filter(p => p.id !== id);
+        const patch = { aiProviders: next };
+        if (this.value.aiActiveProviderId === id) patch.aiActiveProviderId = next[0]?.id ?? null;
+        this.commit(patch);
+        if (this.tab === 'ai') this.render();
+        return;
+      }
+      const editBtn = event.target.closest('[data-ai-edit]');
+      if (editBtn) {
+        event.stopPropagation();
+        const p = (this.value.aiProviders || []).find(x => x.id === editBtn.dataset.aiEdit);
+        if (!p) return;
+        const form = this.content.querySelector('#styk-ai-form');
+        if (form) {
+          form.name.value = p.name;
+          form.baseUrl.value = p.baseUrl;
+          form.model.value = p.model;
+          form.apiKey.value = p.apiKey || '';
+          form.dataset.editId = p.id;
+          const btn = form.querySelector('button[type=submit]');
+          if (btn) btn.textContent = this.say('settings.aiSave') || 'Save';
+          form.scrollIntoView({block:'nearest'});
+        }
+        return;
+      }
+      const testBtn = event.target.closest('[data-ai-test]');
+      if (testBtn) {
+        event.stopPropagation();
+        const p = (this.value.aiProviders || []).find(x => x.id === testBtn.dataset.aiTest);
+        if (!p) return;
+        const orig = testBtn.textContent;
+        testBtn.textContent = '...'; testBtn.disabled = true;
+        try {
+          const { testProvider } = await import('./ai-provider.mjs');
+          await testProvider(p, AbortSignal.timeout(15000));
+          testBtn.textContent = 'OK ✓';
+          setTimeout(()=> { testBtn.textContent = orig; testBtn.disabled = false; }, 1500);
+        } catch (e) {
+          testBtn.textContent = 'Fail';
+          this.showError(e);
+          setTimeout(()=> { testBtn.textContent = orig; testBtn.disabled = false; }, 2000);
+        }
+        return;
+      }
+      const genBtn = event.target.closest('[data-ai-generate]');
+      if (genBtn) {
+        event.stopPropagation();
+        const promptEl = this.content.querySelector('#styk-ai-prompt');
+        const outEl = this.content.querySelector('#styk-ai-output');
+        const prompt = promptEl?.value?.trim();
+        if (!prompt) { this.showError(new Error(this.say('settings.aiPromptRequired') || 'Prompt is required')); return; }
+        const active = (this.value.aiProviders || []).find(x => x.id === this.value.aiActiveProviderId) ?? (this.value.aiProviders||[])[0];
+        if (!active) { this.showError(new Error(this.say('settings.aiNoActiveProvider') || 'Add a provider first')); return; }
+        genBtn.disabled = true; genBtn.textContent = '...';
+        try {
+          const { generatePlan, planToSummary } = await import('./ai-animation.mjs');
+          const plan = await generatePlan(prompt, active, { signal: AbortSignal.timeout(30000) });
+          const summary = planToSummary(plan);
+          if (outEl) { outEl.hidden = false; outEl.innerHTML = `<pre>${escape(JSON.stringify(plan,null,2))}</pre><p class="styk-settings-hint">${escape(summary)}</p>`; }
+        } catch (e) { this.showError(e); }
+        genBtn.disabled = false; genBtn.textContent = this.say('settings.aiGenerate') || 'Generate';
+        return;
+      }
+      const localBtn = event.target.closest('[data-ai-generate-local]');
+      if (localBtn) {
+        event.stopPropagation();
+        const promptEl = this.content.querySelector('#styk-ai-prompt');
+        const outEl = this.content.querySelector('#styk-ai-output');
+        const prompt = promptEl?.value?.trim() || 'punch combo';
+        try {
+          const { generatePlanLocal, planToSummary } = await import('./ai-animation.mjs');
+          const plan = generatePlanLocal(prompt);
+          const summary = planToSummary(plan);
+          if (outEl) { outEl.hidden = false; outEl.innerHTML = `<pre>${escape(JSON.stringify(plan,null,2))}</pre><p class="styk-settings-hint">${escape(summary)} (local, no LLM)</p>`; }
+        } catch (e) { this.showError(e); }
+        return;
+      }
+    });
+    this.dialog.addEventListener("submit", (event) => {
+      const form = event.target.closest('#styk-ai-form');
+      if (!form) return;
+      event.preventDefault(); event.stopPropagation();
+      const data = new FormData(form);
+      const name = String(data.get('name')||'').trim();
+      const baseUrl = String(data.get('baseUrl')||'').trim();
+      const model = String(data.get('model')||'').trim();
+      const apiKey = String(data.get('apiKey')||'').trim();
+      if (!baseUrl || !model) { this.showError(new Error(this.say('settings.aiBaseUrlRequired') || 'baseUrl & model required')); return; }
+      const editId = form.dataset.editId;
+      let nextProviders;
+      if (editId) {
+        nextProviders = (this.value.aiProviders||[]).map(p => p.id===editId ? {...p, name, baseUrl: baseUrl.replace(/\/$/,'').replace(/\/$/,''), model, apiKey} : p);
+        delete form.dataset.editId;
+        const btn = form.querySelector('button[type=submit]');
+        if (btn) btn.textContent = this.say('settings.aiAdd') || 'Add';
+      } else {
+        const newProvider = { id: `ai-${Date.now().toString(36)}`, name: name || 'Custom', baseUrl: baseUrl.replace(/\/$/,'').replace(/\/$/,''), model, apiKey };
+        nextProviders = [...(this.value.aiProviders||[]), newProvider];
+      }
+      this.commit({ aiProviders: nextProviders, aiActiveProviderId: this.value.aiActiveProviderId || nextProviders[0]?.id || null });
+      form.reset();
+      if (this.tab === 'ai') this.render();
     });
   }
   t(key, params) { return this.localization.t(key, params); }
@@ -674,6 +806,46 @@ export class EditorSettings {
         ['ctrlSpaceDrag', 'ctrlSpaceDragResult'],
         ['shiftSpaceDrag', 'shiftSpaceDragResult'],
       ].map(([gesture, result]) => `<div class="styk-settings-row"><dt ${messageAttributes('settings.gesture.' + gesture, {})}>${escape(say('settings.gesture.' + gesture))}</dt><dd ${messageAttributes('settings.gesture.' + result, {})}>${escape(say('settings.gesture.' + result))}</dd></div>`).join("")}</dl>`, 'settings-pen-gestures');
+    if (tab === 'ai') {
+      const providers = value.aiProviders || [];
+      const activeId = value.aiActiveProviderId;
+      const providerRows = providers.length
+        ? providers.map(p => `<div class="styk-settings-row styk-settings-ai-provider" data-ai-provider="${escape(p.id)}">
+            <span class="styk-settings-text"><span class="styk-settings-label">${escape(p.name)}</span><small class="styk-settings-hint">${escape(p.model)} · ${escape(p.baseUrl)}</small></span>
+            <span class="styk-settings-ai-actions">
+              <button type="button" class="ui-button" data-size="sm" data-ai-select="${escape(p.id)}" ${activeId===p.id ? 'disabled' : ''}>${activeId===p.id ? escape(say('settings.aiActive')) : escape(say('settings.aiUse'))}</button>
+              <button type="button" class="ui-icon-button" data-ai-test="${escape(p.id)}" aria-label="Test" title="${escape(say('settings.aiTest'))}">${icon('activity')}</button>
+              <button type="button" class="ui-icon-button" data-ai-edit="${escape(p.id)}" aria-label="Edit">${icon('sliders')}</button>
+              <button type="button" class="ui-icon-button" data-ai-delete="${escape(p.id)}" aria-label="Delete">${icon('trash')}</button>
+            </span>
+          </div>`).join('')
+        : `<div class="styk-settings-empty">${icon('lightbulb')}<p>${escape(say('settings.aiNoProvider'))}</p></div>`;
+      const formId = 'styk-ai-form';
+      const addForm = `<form id="${formId}" class="styk-settings-card styk-ai-form">
+        <h5>${escape(say('settings.aiAddProvider'))}</h5>
+        <label class="styk-settings-row"><span class="styk-settings-label">${escape(say('settings.aiName'))}</span><input type="text" name="name" placeholder="My OpenAI" required></label>
+        <label class="styk-settings-row"><span class="styk-settings-label">${escape(say('settings.aiBaseUrl'))}</span><input type="url" name="baseUrl" placeholder="https://api.openai.com/v1" required></label>
+        <label class="styk-settings-row"><span class="styk-settings-label">${escape(say('settings.aiModel'))}</span><input type="text" name="model" placeholder="gpt-4o-mini" required></label>
+        <label class="styk-settings-row"><span class="styk-settings-label">${escape(say('settings.aiApiKey'))}</span><input type="password" name="apiKey" placeholder="sk-... (kosong untuk Ollama lokal)"></label>
+        <div class="styk-settings-row styk-ai-form-actions">
+          <button type="submit" class="ui-button" data-variant="primary">${icon('plus')}${escape(say('settings.aiAdd'))}</button>
+          <small class="styk-settings-hint">${escape(say('settings.aiCustomNote'))}</small>
+        </div>
+      </form>`;
+      const generateBox = `<div class="styk-settings-card styk-ai-generate">
+        <h5>${icon('lightbulb')}${escape(say('settings.aiGenerateTitle'))}</h5>
+        <p class="styk-settings-hint">${escape(say('settings.aiGenerateHint'))}</p>
+        <div class="styk-settings-row"><input type="text" id="styk-ai-prompt" placeholder="${escape(say('settings.aiPromptPlaceholder'))}" style="flex:1"></div>
+        <div class="styk-settings-row styk-ai-generate-actions">
+          <button type="button" class="ui-button" data-variant="primary" data-ai-generate>${icon('play')}${escape(say('settings.aiGenerate'))}</button>
+          <button type="button" class="ui-button" data-ai-generate-local>${escape(say('settings.aiGenerateLocal'))}</button>
+        </div>
+        <div id="styk-ai-output" class="styk-ai-output" hidden></div>
+      </div>`;
+      return this.group(say('settings.aiProviders'), providerRows + addForm)
+        + this.group(say('settings.aiGenerate'), generateBox)
+        + `<p class="styk-settings-note">${icon('lock')}<span>${escape(say('settings.aiPrivacyNote'))}</span></p>`;
+    }
     if (tab === 'feedback')
       return `<div class="settings-feedback-actions">${[
         ['bug', 'bug', 'draw'],
