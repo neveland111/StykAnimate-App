@@ -111,7 +111,6 @@ export function normalizePlan(raw = {}) {
   let durationFrames = sequence.reduce((a,b)=>a+b.frames, 0);
   if (Number.isFinite(raw.durationFrames)) {
     const claimed = Math.max(12, Math.min(180, Math.round(raw.durationFrames)));
-    // If claimed differs a lot, keep sum but warn; trust sum for consistency
     if (Math.abs(claimed - durationFrames) > 6) durationFrames = durationFrames; else durationFrames = claimed;
   }
   return { title, fps, durationFrames, figures, sequence };
@@ -161,20 +160,15 @@ export function generatePlanLocal(prompt = '') {
   push('stand', 8, 'easeOut');
   const title = prompt.slice(0, 30) || 'AI Animation';
   const durationFrames = seq.reduce((a,b)=>a+b.frames,0);
-  return { title, fps: 24, durationFrames, figures: p.includes('2') || p.includes('dua') ? 2 : 1, sequence: seq };
+  return { title, fps: 24, durationFrames, figures: p.includes('2') || p.includes('dua') || p.includes('vs') || p.includes('fight') ? 2 : 1, sequence: seq };
 }
 
-/**
- * Convert plan -> human readable summary and placeholder document patch.
- * For v1, we don't mutate the actual figure geometry; we return a plan that
- * the UI can display and that future version can commit as keyframes via editor commands.
- *
- * Returns: {plan, summary, documentPatchSuggestion}
- */
 export function planToSummary(plan) {
   const lines = plan.sequence.map(s => `${MOTION_LIBRARY[s.move].label} ×${s.frames}f (${s.easing})`);
   return `${plan.title} — ${plan.fps}fps, ${plan.durationFrames}f, ${plan.figures} fig. → ${lines.join(' → ')}`;
 }
+
+/** --- Tier 2: AI polish --- */
 
 export const MOVE_DELTAS = Object.freeze({
   stand: { x: 0, y: 0 },
@@ -190,38 +184,151 @@ export const MOVE_DELTAS = Object.freeze({
   fall: { x: 6, y: 14 },
   getup: { x: -6, y: -14 },
 });
+
+/** Defender reaction for 2-figure interaction */
+export const DEFENDER_DELTAS = Object.freeze({
+  stand: { x: 0, y: 0 },
+  walk: { x: -8, y: 0 },
+  run: { x: -12, y: 0 },
+  jump: { x: 0, y: 0 },
+  punch: { x: -14, y: 2 },
+  kick: { x: -18, y: 6 },
+  salto: { x: -12, y: -4 },
+  block: { x: -3, y: 0 },
+  hadouken: { x: -28, y: 0 },
+  dance: { x: -6, y: 1 },
+  fall: { x: 8, y: 16 },
+  getup: { x: -6, y: -16 },
+});
+
 export function moveDelta(move) { return MOVE_DELTAS[move] ?? MOVE_DELTAS.stand; }
+export function defenderDelta(move) { return DEFENDER_DELTAS[move] ?? DEFENDER_DELTAS.stand; }
+
+const EASING_FN = Object.freeze({
+  linear: t => t,
+  easeIn: t => t * t,
+  easeOut: t => 1 - (1 - t) * (1 - t),
+  easeInOut: t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2,
+});
+
+/**
+ * Apply a plan directly to the editor by creating keyframes with easing and 2-figure interaction.
+ * - Easing is honored per-step: delta is distributed non-linearly across keyCount frames.
+ * - 2-figure: if plan.figures==2, attacker (figure 0) moves by MOVE_DELTAS, defender (figure 1) recoils by DEFENDER_DELTAS.
+ *   Auto-creates defender by duplicating first figure if needed.
+ */
 export function applyPlanToEditor(editor, plan, opts = {}) {
   if (!editor) throw new Error('Editor not available. Open an animation first.');
   if (!plan?.sequence?.length) throw new Error('Empty plan');
   const first = editor.frame?.objects?.[0];
   if (!first) throw new Error('No figure in current frame. Add a stickman first.');
-  const targetUids = editor.selectedUids?.size ? [...editor.selectedUids] : [first.unique_id];
-  if (plan.figures === 2 && editor.frame.objects[1]) targetUids.push(editor.frame.objects[1].unique_id);
+
+  // --- Ensure defender exists for 2-figure plans ---
+  let attackerUid = first.unique_id;
+  let defenderUid = editor.frame.objects[1]?.unique_id ?? null;
+
+  if (plan.figures === 2 && !defenderUid) {
+    try {
+      // Try to duplicate first figure offset to the right
+      editor.select(attackerUid);
+      let added = null;
+      try { added = editor.duplicateSelection({ offset: 100 }); } catch {}
+      if (!added) { try { added = editor.duplicateFigure?.(); } catch {} }
+      // After duplication, frame has 2 objects; find new uid that isn't attacker
+      const afterObjs = editor.frame.objects;
+      const newObj = afterObjs.find(o => o.unique_id !== attackerUid);
+      if (newObj) {
+        defenderUid = newObj.unique_id;
+        // Nudge defender a bit apart so they don't overlap
+        editor.select(defenderUid);
+        editor.moveSelection(40, 0);
+        editor.select(attackerUid);
+      } else if (afterObjs[1]) {
+        defenderUid = afterObjs[1].unique_id;
+      }
+    } catch (e) {
+      // Non-fatal: continue with 1 figure
+      defenderUid = null;
+    }
+  }
+
+  // Keep track of current uids (they persist across addFrame clones)
   let framesAdded = 0;
   const totalSteps = plan.sequence.reduce((a, s) => a + Math.max(1, Math.round(s.frames / 4)), 0);
   let done = 0;
+
   for (const step of plan.sequence) {
     const keyCount = Math.max(1, Math.round(step.frames / 4));
     const delta = moveDelta(step.move);
-    const stepX = delta.x / keyCount;
-    const stepY = delta.y / keyCount;
+    const defDelta = defenderDelta(step.move);
+    const easeFn = EASING_FN[step.easing] ?? EASING_FN.linear;
+
+    // Distribute delta via easing across keyCount frames
+    let prevEased = 0;
     for (let k = 0; k < keyCount; k++) {
+      const t1 = (k + 1) / keyCount;
+      const eased1 = easeFn(t1);
+      const proportion = eased1 - prevEased;
+      prevEased = eased1;
+
+      const stepX = delta.x * proportion;
+      const stepY = delta.y * proportion;
+      const defStepX = defDelta.x * proportion;
+      const defStepY = defDelta.y * proportion;
+
+      // Create new keyframe (duplicate current pose)
       try {
         editor.addFrame({ blank: false });
         framesAdded++;
-        for (const uid of targetUids) {
-          const cur = editor.frame.objects.find(o => o.unique_id === uid) ?? editor.frame.objects[0];
-          if (cur) editor.select(cur.unique_id); else editor.select(editor.frame.objects[0]?.unique_id);
-        }
-        editor.moveSelection(stepX, stepY);
       } catch (e) {
-        try { editor.addFrame(); editor.select(editor.frame.objects[0]?.unique_id); editor.moveSelection(stepX, stepY); framesAdded++; } catch (inner) { throw e; }
+        try { editor.addFrame(); framesAdded++; } catch (inner) { throw e; }
       }
+
+      // Move attacker in new frame
+      if (attackerUid) {
+        const curA = editor.frame.objects.find(o => o.unique_id === attackerUid) ?? editor.frame.objects[0];
+        if (curA) {
+          if (Math.abs(stepX) > 0.01 || Math.abs(stepY) > 0.01) {
+            editor.select(curA.unique_id);
+            editor.moveSelection(stepX, stepY);
+          }
+          attackerUid = curA.unique_id;
+        }
+      }
+      // Move defender with reaction (separate selection)
+      if (defenderUid) {
+        const curD = editor.frame.objects.find(o => o.unique_id === defenderUid) ?? editor.frame.objects[1];
+        if (curD && (Math.abs(defStepX) > 0.01 || Math.abs(defStepY) > 0.01)) {
+          editor.select(curD.unique_id);
+          editor.moveSelection(defStepX, defStepY);
+          defenderUid = curD.unique_id;
+        }
+      }
+      // Restore selection to attacker for next iteration's duplicate logic (optional)
+      if (attackerUid) {
+        const keep = editor.frame.objects.find(o => o.unique_id === attackerUid);
+        if (keep) editor.select(keep.unique_id);
+      }
+
       done++; opts.onProgress?.(done, totalSteps);
     }
-    if (step.move === 'stand' && framesAdded > 2) editor.moveSelection(-2, 0);
+
+    // Small settle for stand to avoid drift
+    if (step.move === 'stand' && framesAdded > 2) {
+      if (attackerUid) {
+        const curA = editor.frame.objects.find(o => o.unique_id === attackerUid);
+        if (curA) { editor.select(curA.unique_id); editor.moveSelection(-1.5, 0); }
+      }
+      if (defenderUid) {
+        const curD = editor.frame.objects.find(o => o.unique_id === defenderUid);
+        if (curD) { editor.select(curD.unique_id); editor.moveSelection(1, 0); }
+      }
+    }
   }
-  if (editor.name === 'Untitled' || !editor.name) { try { editor.name = plan.title; } catch {} }
+
+  if (editor.name === 'Untitled' || !editor.name || editor.name === 'Untitled') {
+    try { editor.name = plan.title; } catch {}
+  }
+
   return framesAdded;
 }
