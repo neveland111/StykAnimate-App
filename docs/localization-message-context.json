@@ -32073,88 +32073,88 @@
   },
   "settings.advancedDescription": {
     "locations": [
-      "src/settings.mjs:748"
+      "src/settings.mjs:779"
     ],
     "context": "[\"advanced\", this.t(\"timeline.advanced\"), this.t(\"settings.advancedDescription\")],"
   },
   "settings.aiActive": {
     "locations": [
-      "src/settings.mjs:816"
+      "src/settings.mjs:847"
     ],
     "context": "<button type=\"button\" class=\"ui-button\" data-size=\"sm\" data-ai-select=\"${escape(p.id)}\" ${activeId===p.id ? 'disabled' : ''}>${activeId===p.id ? escape(say('set"
   },
   "settings.aiAdd": {
     "locations": [
-      "src/settings.mjs:553",
-      "src/settings.mjs:831"
+      "src/settings.mjs:584",
+      "src/settings.mjs:862"
     ],
     "context": "if (btn) btn.textContent = this.say('settings.aiAdd') || 'Add';"
   },
   "settings.aiAddProvider": {
     "locations": [
-      "src/settings.mjs:825"
+      "src/settings.mjs:856"
     ],
     "context": "<h5>${escape(say('settings.aiAddProvider'))}</h5>"
   },
   "settings.aiApiKey": {
     "locations": [
-      "src/settings.mjs:829"
+      "src/settings.mjs:860"
     ],
     "context": "<label class=\"styk-settings-row\"><span class=\"styk-settings-label\">${escape(say('settings.aiApiKey'))}</span><input type=\"password\" name=\"apiKey\" placeholder=\"s"
   },
   "settings.aiBaseUrl": {
     "locations": [
-      "src/settings.mjs:827"
+      "src/settings.mjs:858"
     ],
     "context": "<label class=\"styk-settings-row\"><span class=\"styk-settings-label\">${escape(say('settings.aiBaseUrl'))}</span><input type=\"url\" name=\"baseUrl\" placeholder=\"http"
   },
   "settings.aiBaseUrlRequired": {
     "locations": [
-      "src/settings.mjs:546"
+      "src/settings.mjs:577"
     ],
     "context": "if (!baseUrl || !model) { this.showError(new Error(this.say('settings.aiBaseUrlRequired') || 'baseUrl & model required')); return; }"
   },
   "settings.aiCustomNote": {
     "locations": [
-      "src/settings.mjs:832"
+      "src/settings.mjs:863"
     ],
     "context": "<small class=\"styk-settings-hint\">${escape(say('settings.aiCustomNote'))}</small>"
   },
   "settings.aiGenerate": {
     "locations": [
-      "src/settings.mjs:519",
-      "src/settings.mjs:840",
-      "src/settings.mjs:846"
+      "src/settings.mjs:520",
+      "src/settings.mjs:871",
+      "src/settings.mjs:877"
     ],
     "context": "genBtn.disabled = false; genBtn.textContent = this.say('settings.aiGenerate') || 'Generate';"
   },
   "settings.aiGenerateHint": {
     "locations": [
-      "src/settings.mjs:837"
+      "src/settings.mjs:868"
     ],
     "context": "<p class=\"styk-settings-hint\">${escape(say('settings.aiGenerateHint'))}</p>"
   },
   "settings.aiGenerateLocal": {
     "locations": [
-      "src/settings.mjs:841"
+      "src/settings.mjs:872"
     ],
     "context": "<button type=\"button\" class=\"ui-button\" data-ai-generate-local>${escape(say('settings.aiGenerateLocal'))}</button>"
   },
   "settings.aiGenerateTitle": {
     "locations": [
-      "src/settings.mjs:836"
+      "src/settings.mjs:867"
     ],
     "context": "<h5>${icon('lightbulb')}${escape(say('settings.aiGenerateTitle'))}</h5>"
   },
   "settings.aiModel": {
     "locations": [
-      "src/settings.mjs:828"
+      "src/settings.mjs:859"
     ],
     "context": "<label class=\"styk-settings-row\"><span class=\"styk-settings-label\">${escape(say('settings.aiModel'))}</span><input type=\"text\" name=\"model\" placeholder=\"gpt-4o-"
   },
   "settings.aiName": {
     "locations": [
-      "src/settings.mjs:826"
+      "src/settings.mjs:857"
     ],
     "context": "<label class=\"styk-settings-row\"><span class=\"styk-settings-label\">${escape(say('settings.aiName'))}</span><input type=\"text\" name=\"name\" placeholder=\"My OpenAI"
   },
@@ -32166,19 +32166,19 @@
   },
   "settings.aiNoProvider": {
     "locations": [
-      "src/settings.mjs:822"
+      "src/settings.mjs:853"
     ],
     "context": ": `<div class=\"styk-settings-empty\">${icon('lightbulb')}<p>${escape(say('settings.aiNoProvider'))}</p></div>`;"
   },
   "settings.aiPrivacyNote": {
     "locations": [
-      "src/settings.mjs:847"
+      "src/settings.mjs:878"
     ],
     "context": "+ `<p class=\"styk-settings-note\">${icon('lock')}<span>${escape(say('settings.aiPrivacyNote'))}</span></p>`;"
   },
   "settings.aiPromptPlaceholder": {
     "locations": [
-      "src/settings.mjs:838"
+      "src/settings.mjs:869"
     ],
     "context": "<div class=\"styk-settings-row\"><input type=\"text\" id=\"styk-ai-prompt\" placeholder=\"${escape(say('settings.aiPromptPlaceholder'))}\" style=\"flex:1\"></div>"
   },
@@ -32190,7 +32190,7 @@
   },
   "settings.aiProviders": {
     "locations": [
-      "src/settings.mjs:845"
+      "src/settings.mjs:876"
     ],
     "context": "return this.group(say('settings.aiProviders'), providerRows + addForm)"
   },
@@ -32202,19 +32202,19 @@
   },
   "settings.aiTest": {
     "locations": [
-      "src/settings.mjs:817"
+      "src/settings.mjs:848"
     ],
     "context": "<button type=\"button\" class=\"ui-icon-button\" data-ai-test=\"${escape(p.id)}\" aria-label=\"Test\" title=\"${escape(say('settings.aiTest'))}\">${icon('activity')}</but"
   },
   "settings.aiUse": {
     "locations": [
-      "src/settings.mjs:816"
+      "src/settings.mjs:847"
     ],
     "context": "<button type=\"button\" class=\"ui-button\" data-size=\"sm\" data-ai-select=\"${escape(p.id)}\" ${activeId===p.id ? 'disabled' : ''}>${activeId===p.id ? escape(say('set"
   },
   "settings.altDragFigureRoot": {
     "locations": [
-      "src/settings.mjs:772"
+      "src/settings.mjs:803"
     ],
     "context": "this.select(say('settings.altDragFigureRoot'), 'altDragDuplicate', [messageTuple(['instance', interfaceText(\"settings.linkedInstance\")], {1: {key: \"settings.lin"
   },
@@ -32226,117 +32226,117 @@
   },
   "settings.appearance": {
     "locations": [
-      "src/settings.mjs:757"
+      "src/settings.mjs:788"
     ],
     "context": "return this.group(this.t(\"settings.appearance\"), themes + language + coverage + this.scaleControl())"
   },
   "settings.autosaveInterval": {
     "locations": [
-      "src/settings.mjs:799"
+      "src/settings.mjs:830"
     ],
     "context": "+ this.group(say(\"settings.recovery\"), this.select(say(\"settings.autosaveInterval\"), 'autosaveSeconds', autosave, say(\"settings.autosaveNote\")));"
   },
   "settings.autosaveNote": {
     "locations": [
-      "src/settings.mjs:799"
+      "src/settings.mjs:830"
     ],
     "context": "+ this.group(say(\"settings.recovery\"), this.select(say(\"settings.autosaveInterval\"), 'autosaveSeconds', autosave, say(\"settings.autosaveNote\")));"
   },
   "settings.autosaveOff": {
     "locations": [
-      "src/settings.mjs:792"
+      "src/settings.mjs:823"
     ],
     "context": "const autosave = [messageTuple([0, say(\"settings.autosaveOff\")], {1: {key: \"settings.autosaveOff\", params: {}}}), ...presets.slice(1, -1).map(seconds => message"
   },
   "settings.autoScale": {
     "locations": [
-      "src/settings.mjs:709"
+      "src/settings.mjs:740"
     ],
     "context": "return `<div class=\"styk-settings-row styk-settings-scale\"><span class=\"styk-settings-text\"><label class=\"styk-settings-label\" for=\"styk-ui-scale\" ${messageAttr"
   },
   "settings.autoScaleNote": {
     "locations": [
-      "src/settings.mjs:696",
-      "src/settings.mjs:707"
+      "src/settings.mjs:727",
+      "src/settings.mjs:738"
     ],
     "context": "if (note) { note.hidden = !auto; note.textContent = this.t('settings.autoScaleNote').replace('{scale}', `${autoUIScale()}%`); }"
   },
   "settings.autoSize": {
     "locations": [
-      "src/settings.mjs:776"
+      "src/settings.mjs:807"
     ],
     "context": "+ this.checkbox(say(\"settings.autoSize\"), 'autoSizeHandles')"
   },
   "settings.boxBounds": {
     "locations": [
-      "src/settings.mjs:769"
+      "src/settings.mjs:800"
     ],
     "context": "+ this.select(say(\"settings.boxSelection\"), 'marqueeSelection', [messageTuple(['bounds', say(\"settings.boxBounds\")], {1: {key: \"settings.boxBounds\", params: {}}"
   },
   "settings.boxOrigins": {
     "locations": [
-      "src/settings.mjs:769"
+      "src/settings.mjs:800"
     ],
     "context": "+ this.select(say(\"settings.boxSelection\"), 'marqueeSelection', [messageTuple(['bounds', say(\"settings.boxBounds\")], {1: {key: \"settings.boxBounds\", params: {}}"
   },
   "settings.boxSelection": {
     "locations": [
-      "src/settings.mjs:769"
+      "src/settings.mjs:800"
     ],
     "context": "+ this.select(say(\"settings.boxSelection\"), 'marqueeSelection', [messageTuple(['bounds', say(\"settings.boxBounds\")], {1: {key: \"settings.boxBounds\", params: {}}"
   },
   "settings.browserScale": {
     "locations": [
-      "src/settings.mjs:708"
+      "src/settings.mjs:739"
     ],
     "context": ": `<small class=\"styk-settings-hint\" ${messageAttributes('settings.browserScale', {})}>${escape(this.t('settings.browserScale'))}</small>`;"
   },
   "settings.builder": {
     "locations": [
-      "src/settings.mjs:782"
+      "src/settings.mjs:813"
     ],
     "context": "+ this.group(say(\"settings.builder\"),"
   },
   "settings.canvas2d": {
     "locations": [
-      "src/settings.mjs:788"
+      "src/settings.mjs:819"
     ],
     "context": "this.select(say(\"settings.graphicsMode\"), 'rendererMode', [messageTuple(['auto', say(\"settings.graphicsAuto\")], {1: {key: \"settings.graphicsAuto\", params: {}}})"
   },
   "settings.chooseWhetherPastedFiguresKeepTheirCopiedDepth": {
     "locations": [
-      "src/settings.mjs:770"
+      "src/settings.mjs:801"
     ],
     "context": "+ this.group(interfaceText(\"settings.pasting\"), this.select(interfaceText(\"settings.pastedFigureDepth\"), 'pasteDepth', [messageTuple(['same', interfaceText(\"set"
   },
   "settings.close": {
     "locations": [
       "src/settings.mjs:324",
-      "src/settings.mjs:576"
+      "src/settings.mjs:607"
     ],
     "context": "localizedMarkup(this.dialog, `<header class=\"styk-settings-head\"><img class=\"styk-settings-mark\" src=\"${SYMBOL_URL}\" alt=\"\"><h2 ${messageAttributes(\"settings.ti"
   },
   "settings.construction": {
     "locations": [
-      "src/settings.mjs:785"
+      "src/settings.mjs:816"
     ],
     "context": "+ this.checkbox(say(\"settings.construction\"), 'useBuilderCanvasColor')"
   },
   "settings.constructionColor": {
     "locations": [
-      "src/settings.mjs:786"
+      "src/settings.mjs:817"
     ],
     "context": "+ `<label class=\"styk-settings-row\">${this.text(say(\"settings.constructionColorShort\"))}<span class=\"styk-settings-color\"><input type=\"color\" data-setting=\"buil"
   },
   "settings.constructionColorShort": {
     "locations": [
-      "src/settings.mjs:786"
+      "src/settings.mjs:817"
     ],
     "context": "+ `<label class=\"styk-settings-row\">${this.text(say(\"settings.constructionColorShort\"))}<span class=\"styk-settings-color\"><input type=\"color\" data-setting=\"buil"
   },
   "settings.customScale": {
     "locations": [
-      "src/settings.mjs:709"
+      "src/settings.mjs:740"
     ],
     "context": "return `<div class=\"styk-settings-row styk-settings-scale\"><span class=\"styk-settings-text\"><label class=\"styk-settings-label\" for=\"styk-ui-scale\" ${messageAttr"
   },
@@ -32344,282 +32344,282 @@
     "locations": [
       "src/settings.mjs:350",
       "src/settings.mjs:351",
-      "src/settings.mjs:588",
-      "src/settings.mjs:589"
+      "src/settings.mjs:619",
+      "src/settings.mjs:620"
     ],
     "context": "localizedMarkup(button, `<span class=\"styk-settings-donate-badge\">${icon('heart')}</span><span class=\"styk-settings-donate-text\"><strong ${messageAttributes('se"
   },
   "settings.donateNote": {
     "locations": [
       "src/settings.mjs:350",
-      "src/settings.mjs:590"
+      "src/settings.mjs:621"
     ],
     "context": "localizedMarkup(button, `<span class=\"styk-settings-donate-badge\">${icon('heart')}</span><span class=\"styk-settings-donate-text\"><strong ${messageAttributes('se"
   },
   "settings.duplication": {
     "locations": [
-      "src/settings.mjs:771"
+      "src/settings.mjs:802"
     ],
     "context": "+ this.group(interfaceText(\"settings.duplication\"),"
   },
   "settings.editorLabel": {
     "locations": [
       "src/settings.mjs:323",
-      "src/settings.mjs:574"
+      "src/settings.mjs:605"
     ],
     "context": "localizedAttribute(this.dialog, \"aria-label\", \"settings.editorLabel\", {});"
   },
   "settings.feedback.myReports": {
     "locations": [
-      "src/settings.mjs:855"
+      "src/settings.mjs:886"
     ],
     "context": "+ `<div class=\"styk-settings-card settings-feedback-private\"><span class=\"settings-feedback-lock\">${icon('lock')}</span>${this.text(say(\"settings.feedback.priva"
   },
   "settings.feedback.private": {
     "locations": [
-      "src/settings.mjs:855"
+      "src/settings.mjs:886"
     ],
     "context": "+ `<div class=\"styk-settings-card settings-feedback-private\"><span class=\"settings-feedback-lock\">${icon('lock')}</span>${this.text(say(\"settings.feedback.priva"
   },
   "settings.feedback.privateNote": {
     "locations": [
-      "src/settings.mjs:855"
+      "src/settings.mjs:886"
     ],
     "context": "+ `<div class=\"styk-settings-card settings-feedback-private\"><span class=\"settings-feedback-lock\">${icon('lock')}</span>${this.text(say(\"settings.feedback.priva"
   },
   "settings.feedback.start": {
     "locations": [
-      "src/settings.mjs:854"
+      "src/settings.mjs:885"
     ],
     "context": "].map(([category, symbol, tint]) => `<button type=\"button\" class=\"settings-feedback-tile\" data-settings-feedback=\"${category}\" data-tint=\"${tint}\"><span class=\""
   },
   "settings.fingerDraw": {
     "locations": [
-      "src/settings.mjs:756"
+      "src/settings.mjs:787"
     ],
     "context": "+ this.select(say(\"settings.fingerDraw\"), 'fingerDraw', [messageTuple(['auto', say(\"settings.fingerDrawAuto\")], {1: {key: \"settings.fingerDrawAuto\", params: {}}"
   },
   "settings.fingerDrawAlways": {
     "locations": [
-      "src/settings.mjs:756"
+      "src/settings.mjs:787"
     ],
     "context": "+ this.select(say(\"settings.fingerDraw\"), 'fingerDraw', [messageTuple(['auto', say(\"settings.fingerDrawAuto\")], {1: {key: \"settings.fingerDrawAuto\", params: {}}"
   },
   "settings.fingerDrawAuto": {
     "locations": [
-      "src/settings.mjs:756"
+      "src/settings.mjs:787"
     ],
     "context": "+ this.select(say(\"settings.fingerDraw\"), 'fingerDraw', [messageTuple(['auto', say(\"settings.fingerDrawAuto\")], {1: {key: \"settings.fingerDrawAuto\", params: {}}"
   },
   "settings.fingerDrawNever": {
     "locations": [
-      "src/settings.mjs:756"
+      "src/settings.mjs:787"
     ],
     "context": "+ this.select(say(\"settings.fingerDraw\"), 'fingerDraw', [messageTuple(['auto', say(\"settings.fingerDrawAuto\")], {1: {key: \"settings.fingerDrawAuto\", params: {}}"
   },
   "settings.fingerDrawNote": {
     "locations": [
-      "src/settings.mjs:756"
+      "src/settings.mjs:787"
     ],
     "context": "+ this.select(say(\"settings.fingerDraw\"), 'fingerDraw', [messageTuple(['auto', say(\"settings.fingerDrawAuto\")], {1: {key: \"settings.fingerDrawAuto\", params: {}}"
   },
   "settings.fitView": {
     "locations": [
-      "src/settings.mjs:798"
+      "src/settings.mjs:829"
     ],
     "context": "+ this.checkbox(say(\"settings.fitView\"), 'fitViewOnPlayback', say(\"settings.fitViewNote\")))"
   },
   "settings.fitViewNote": {
     "locations": [
-      "src/settings.mjs:798"
+      "src/settings.mjs:829"
     ],
     "context": "+ this.checkbox(say(\"settings.fitView\"), 'fitViewOnPlayback', say(\"settings.fitViewNote\")))"
   },
   "settings.gestures": {
     "locations": [
-      "src/settings.mjs:802"
+      "src/settings.mjs:833"
     ],
     "context": "return this.hotkeySettings.html() + this.group(say(\"settings.gestures\"), `<dl class=\"styk-settings-gestures\">${["
   },
   "settings.graphics": {
     "locations": [
-      "src/settings.mjs:787"
+      "src/settings.mjs:818"
     ],
     "context": "+ this.group(say(\"settings.graphics\"),"
   },
   "settings.graphicsAuto": {
     "locations": [
-      "src/settings.mjs:788"
+      "src/settings.mjs:819"
     ],
     "context": "this.select(say(\"settings.graphicsMode\"), 'rendererMode', [messageTuple(['auto', say(\"settings.graphicsAuto\")], {1: {key: \"settings.graphicsAuto\", params: {}}})"
   },
   "settings.graphicsMode": {
     "locations": [
-      "src/settings.mjs:788"
+      "src/settings.mjs:819"
     ],
     "context": "this.select(say(\"settings.graphicsMode\"), 'rendererMode', [messageTuple(['auto', say(\"settings.graphicsAuto\")], {1: {key: \"settings.graphicsAuto\", params: {}}})"
   },
   "settings.handlePreview": {
     "locations": [
-      "src/settings.mjs:765"
+      "src/settings.mjs:796"
     ],
     "context": "const handleSize = `<div class=\"styk-settings-row styk-settings-block\"><span class=\"styk-settings-handle-head\">${this.text(say(\"settings.handleRadius\"))}<span c"
   },
   "settings.handleRadius": {
     "locations": [
-      "src/settings.mjs:765"
+      "src/settings.mjs:796"
     ],
     "context": "const handleSize = `<div class=\"styk-settings-row styk-settings-block\"><span class=\"styk-settings-handle-head\">${this.text(say(\"settings.handleRadius\"))}<span c"
   },
   "settings.highlightSegment": {
     "locations": [
-      "src/settings.mjs:784"
+      "src/settings.mjs:815"
     ],
     "context": "+ this.checkbox(say(\"settings.highlightSegment\"), 'builderHighlightSegment')"
   },
   "settings.independentCopy": {
     "locations": [
-      "src/settings.mjs:772"
+      "src/settings.mjs:803"
     ],
     "context": "this.select(say('settings.altDragFigureRoot'), 'altDragDuplicate', [messageTuple(['instance', interfaceText(\"settings.linkedInstance\")], {1: {key: \"settings.lin"
   },
   "settings.inFront": {
     "locations": [
-      "src/settings.mjs:770"
+      "src/settings.mjs:801"
     ],
     "context": "+ this.group(interfaceText(\"settings.pasting\"), this.select(interfaceText(\"settings.pastedFigureDepth\"), 'pasteDepth', [messageTuple(['same', interfaceText(\"set"
   },
   "settings.jointHandles": {
     "locations": [
-      "src/settings.mjs:773"
+      "src/settings.mjs:804"
     ],
     "context": "+ this.group(say(\"settings.jointHandles\"),"
   },
   "settings.keyframes": {
     "locations": [
-      "src/settings.mjs:794"
+      "src/settings.mjs:825"
     ],
     "context": "return this.group(say(\"settings.keyframes\"), this.checkbox(say(\"settings.replaceOnDrop\"), 'replaceKeyframesOnDrop', say(\"settings.replaceOnDropNote\")))"
   },
   "settings.language": {
     "locations": [
-      "src/settings.mjs:745"
+      "src/settings.mjs:776"
     ],
     "context": "const language = this.select(this.t('settings.language'), 'locale', SUPPORTED_LOCALES.map(locale => [locale.id, locale.nativeName]));"
   },
   "settings.linkedInstance": {
     "locations": [
-      "src/settings.mjs:772"
+      "src/settings.mjs:803"
     ],
     "context": "this.select(say('settings.altDragFigureRoot'), 'altDragDuplicate', [messageTuple(['instance', interfaceText(\"settings.linkedInstance\")], {1: {key: \"settings.lin"
   },
   "settings.linkedInstancesShareFigureEditsMadeInBuild": {
     "locations": [
-      "src/settings.mjs:772"
+      "src/settings.mjs:803"
     ],
     "context": "this.select(say('settings.altDragFigureRoot'), 'altDragDuplicate', [messageTuple(['instance', interfaceText(\"settings.linkedInstance\")], {1: {key: \"settings.lin"
   },
   "settings.loop": {
     "locations": [
-      "src/settings.mjs:797"
+      "src/settings.mjs:828"
     ],
     "context": "+ this.checkbox(say(\"settings.loop\"), 'loopPlayback')"
   },
   "settings.message0pxSolidTransparent": {
     "locations": [
-      "src/settings.mjs:765",
-      "src/settings.mjs:922"
+      "src/settings.mjs:796",
+      "src/settings.mjs:953"
     ],
     "context": "const handleSize = `<div class=\"styk-settings-row styk-settings-block\"><span class=\"styk-settings-handle-head\">${this.text(say(\"settings.handleRadius\"))}<span c"
   },
   "settings.message1pxSolid000": {
     "locations": [
-      "src/settings.mjs:765",
-      "src/settings.mjs:922"
+      "src/settings.mjs:796",
+      "src/settings.mjs:953"
     ],
     "context": "const handleSize = `<div class=\"styk-settings-row styk-settings-block\"><span class=\"styk-settings-handle-head\">${this.text(say(\"settings.handleRadius\"))}<span c"
   },
   "settings.minute": {
     "locations": [
-      "src/settings.mjs:792"
+      "src/settings.mjs:823"
     ],
     "context": "const autosave = [messageTuple([0, say(\"settings.autosaveOff\")], {1: {key: \"settings.autosaveOff\", params: {}}}), ...presets.slice(1, -1).map(seconds => message"
   },
   "settings.motionPaths": {
     "locations": [
-      "src/settings.mjs:781"
+      "src/settings.mjs:812"
     ],
     "context": "+ this.checkbox(say(\"settings.motionPaths\"), 'motionPaths'))"
   },
   "settings.navigation": {
     "locations": [
-      "src/settings.mjs:766"
+      "src/settings.mjs:797"
     ],
     "context": "return this.group(say(\"settings.navigation\"),"
   },
   "settings.noResults": {
     "locations": [
-      "src/settings.mjs:736"
+      "src/settings.mjs:767"
     ],
     "context": "if (!found) return `${heading}<div class=\"styk-settings-empty\">${icon('search')}<p ${messageAttributes('settings.noResults', {query: query.trim()})}>${escape(th"
   },
   "settings.outline": {
     "locations": [
-      "src/settings.mjs:777"
+      "src/settings.mjs:808"
     ],
     "context": "+ this.checkbox(say(\"settings.outline\"), 'outlineHandles')"
   },
   "settings.overlays": {
     "locations": [
-      "src/settings.mjs:779"
+      "src/settings.mjs:810"
     ],
     "context": "+ this.group(say(\"settings.overlays\"),"
   },
   "settings.panelLayouts": {
     "locations": [
-      "src/settings.mjs:752"
+      "src/settings.mjs:783"
     ],
     "context": "? this.group(this.t('settings.workspace'), `<div class=\"styk-settings-row\">${this.text(say(\"settings.panelLayouts\"), say(\"settings.panelLayoutsNote\"))}<button t"
   },
   "settings.panelLayoutsNote": {
     "locations": [
-      "src/settings.mjs:752"
+      "src/settings.mjs:783"
     ],
     "context": "? this.group(this.t('settings.workspace'), `<div class=\"styk-settings-row\">${this.text(say(\"settings.panelLayouts\"), say(\"settings.panelLayoutsNote\"))}<button t"
   },
   "settings.partialLanguage": {
     "locations": [
-      "src/settings.mjs:746"
+      "src/settings.mjs:777"
     ],
     "context": "const coverage = this.localization.hasFallback ? `<p class=\"styk-settings-note\">${icon('alert')}<span data-locale-coverage ${messageAttributes('settings.partial"
   },
   "settings.pastedFigureDepth": {
     "locations": [
-      "src/settings.mjs:770"
+      "src/settings.mjs:801"
     ],
     "context": "+ this.group(interfaceText(\"settings.pasting\"), this.select(interfaceText(\"settings.pastedFigureDepth\"), 'pasteDepth', [messageTuple(['same', interfaceText(\"set"
   },
   "settings.pasting": {
     "locations": [
-      "src/settings.mjs:770"
+      "src/settings.mjs:801"
     ],
     "context": "+ this.group(interfaceText(\"settings.pasting\"), this.select(interfaceText(\"settings.pastedFigureDepth\"), 'pasteDepth', [messageTuple(['same', interfaceText(\"set"
   },
   "settings.playback": {
     "locations": [
-      "src/settings.mjs:795"
+      "src/settings.mjs:826"
     ],
     "context": "+ this.group(say(\"settings.playback\"),"
   },
   "settings.playbackQuality": {
     "locations": [
-      "src/settings.mjs:796"
+      "src/settings.mjs:827"
     ],
     "context": "this.select(say(\"settings.playbackQuality\"), 'playbackQuality', playbackQualityOptions.map(option => messageTuple([option.id, say(option.labelKey)], {1: {key: o"
   },
   "settings.playbackQualityNote": {
     "locations": [
-      "src/settings.mjs:796"
+      "src/settings.mjs:827"
     ],
     "context": "this.select(say(\"settings.playbackQuality\"), 'playbackQuality', playbackQualityOptions.map(option => messageTuple([option.id, say(option.labelKey)], {1: {key: o"
   },
@@ -32627,105 +32627,105 @@
     "locations": [
       "src/settings.mjs:342",
       "src/settings.mjs:343",
-      "src/settings.mjs:583"
+      "src/settings.mjs:614"
     ],
     "context": "localizedMarkup(button, `${icon('lock')}<span ${messageAttributes('settings.privacy', {})}>${escape(this.say('settings.privacy'))}</span>`);"
   },
   "settings.recovery": {
     "locations": [
-      "src/settings.mjs:799"
+      "src/settings.mjs:830"
     ],
     "context": "+ this.group(say(\"settings.recovery\"), this.select(say(\"settings.autosaveInterval\"), 'autosaveSeconds', autosave, say(\"settings.autosaveNote\")));"
   },
   "settings.replaceOnDrop": {
     "locations": [
-      "src/settings.mjs:794"
+      "src/settings.mjs:825"
     ],
     "context": "return this.group(say(\"settings.keyframes\"), this.checkbox(say(\"settings.replaceOnDrop\"), 'replaceKeyframesOnDrop', say(\"settings.replaceOnDropNote\")))"
   },
   "settings.replaceOnDropNote": {
     "locations": [
-      "src/settings.mjs:794"
+      "src/settings.mjs:825"
     ],
     "context": "return this.group(say(\"settings.keyframes\"), this.checkbox(say(\"settings.replaceOnDrop\"), 'replaceKeyframesOnDrop', say(\"settings.replaceOnDropNote\")))"
   },
   "settings.resetPanels": {
     "locations": [
-      "src/settings.mjs:752"
+      "src/settings.mjs:783"
     ],
     "context": "? this.group(this.t('settings.workspace'), `<div class=\"styk-settings-row\">${this.text(say(\"settings.panelLayouts\"), say(\"settings.panelLayoutsNote\"))}<button t"
   },
   "settings.resetScale": {
     "locations": [
-      "src/settings.mjs:709"
+      "src/settings.mjs:740"
     ],
     "context": "return `<div class=\"styk-settings-row styk-settings-scale\"><span class=\"styk-settings-text\"><label class=\"styk-settings-label\" for=\"styk-ui-scale\" ${messageAttr"
   },
   "settings.sameZIndexDefault": {
     "locations": [
-      "src/settings.mjs:770"
+      "src/settings.mjs:801"
     ],
     "context": "+ this.group(interfaceText(\"settings.pasting\"), this.select(interfaceText(\"settings.pastedFigureDepth\"), 'pasteDepth', [messageTuple(['same', interfaceText(\"set"
   },
   "settings.search": {
     "locations": [
-      "src/settings.mjs:567"
+      "src/settings.mjs:598"
     ],
     "context": "const label = this.say('settings.search');"
   },
   "settings.searchResults": {
     "locations": [
-      "src/settings.mjs:735"
+      "src/settings.mjs:766"
     ],
     "context": "const heading = `<header class=\"styk-settings-page\"><h3 ${messageAttributes('settings.searchResults', {query: query.trim()})}>${escape(this.say('settings.search"
   },
   "settings.seconds": {
     "locations": [
-      "src/settings.mjs:792",
-      "src/settings.mjs:793"
+      "src/settings.mjs:823",
+      "src/settings.mjs:824"
     ],
     "context": "const autosave = [messageTuple([0, say(\"settings.autosaveOff\")], {1: {key: \"settings.autosaveOff\", params: {}}}), ...presets.slice(1, -1).map(seconds => message"
   },
   "settings.sections": {
     "locations": [
       "src/settings.mjs:324",
-      "src/settings.mjs:577"
+      "src/settings.mjs:608"
     ],
     "context": "localizedMarkup(this.dialog, `<header class=\"styk-settings-head\"><img class=\"styk-settings-mark\" src=\"${SYMBOL_URL}\" alt=\"\"><h2 ${messageAttributes(\"settings.ti"
   },
   "settings.settingsFeedbackNote": {
     "locations": [
-      "src/settings.mjs:854"
+      "src/settings.mjs:885"
     ],
     "context": "].map(([category, symbol, tint]) => `<button type=\"button\" class=\"settings-feedback-tile\" data-settings-feedback=\"${category}\" data-tint=\"${tint}\"><span class=\""
   },
   "settings.showHandles": {
     "locations": [
-      "src/settings.mjs:774"
+      "src/settings.mjs:805"
     ],
     "context": "this.checkbox(say(\"settings.showHandles\"), 'showHandles')"
   },
   "settings.showHomeOnStartup": {
     "locations": [
-      "src/settings.mjs:758"
+      "src/settings.mjs:789"
     ],
     "context": "+ this.group(say(\"settings.startup\"), this.checkbox(say(\"settings.showHomeOnStartup\"), 'showHomeOnStartup', say(\"settings.showHomeOnStartupNote\")))"
   },
   "settings.showHomeOnStartupNote": {
     "locations": [
-      "src/settings.mjs:758"
+      "src/settings.mjs:789"
     ],
     "context": "+ this.group(say(\"settings.startup\"), this.checkbox(say(\"settings.showHomeOnStartup\"), 'showHomeOnStartup', say(\"settings.showHomeOnStartupNote\")))"
   },
   "settings.showUnselected": {
     "locations": [
-      "src/settings.mjs:775"
+      "src/settings.mjs:806"
     ],
     "context": "+ this.checkbox(say(\"settings.showUnselected\"), 'showUnselectedHandles')"
   },
   "settings.simpleDescription": {
     "locations": [
-      "src/settings.mjs:749"
+      "src/settings.mjs:780"
     ],
     "context": "[\"simple\", this.t(\"timeline.simple\"), this.t(\"settings.simpleDescription\")],"
   },
@@ -32737,140 +32737,140 @@
   },
   "settings.smoothZoom": {
     "locations": [
-      "src/settings.mjs:768"
+      "src/settings.mjs:799"
     ],
     "context": "+ this.select(say(\"settings.smoothZoom\"), 'smoothZoom', [messageTuple(['auto', say(\"settings.smoothZoomAuto\")], {1: {key: \"settings.smoothZoomAuto\", params: {}}"
   },
   "settings.smoothZoomAuto": {
     "locations": [
-      "src/settings.mjs:768"
+      "src/settings.mjs:799"
     ],
     "context": "+ this.select(say(\"settings.smoothZoom\"), 'smoothZoom', [messageTuple(['auto', say(\"settings.smoothZoomAuto\")], {1: {key: \"settings.smoothZoomAuto\", params: {}}"
   },
   "settings.smoothZoomNote": {
     "locations": [
-      "src/settings.mjs:768"
+      "src/settings.mjs:799"
     ],
     "context": "+ this.select(say(\"settings.smoothZoom\"), 'smoothZoom', [messageTuple(['auto', say(\"settings.smoothZoomAuto\")], {1: {key: \"settings.smoothZoomAuto\", params: {}}"
   },
   "settings.smoothZoomOff": {
     "locations": [
-      "src/settings.mjs:768"
+      "src/settings.mjs:799"
     ],
     "context": "+ this.select(say(\"settings.smoothZoom\"), 'smoothZoom', [messageTuple(['auto', say(\"settings.smoothZoomAuto\")], {1: {key: \"settings.smoothZoomAuto\", params: {}}"
   },
   "settings.smoothZoomOn": {
     "locations": [
-      "src/settings.mjs:768"
+      "src/settings.mjs:799"
     ],
     "context": "+ this.select(say(\"settings.smoothZoom\"), 'smoothZoom', [messageTuple(['auto', say(\"settings.smoothZoomAuto\")], {1: {key: \"settings.smoothZoomAuto\", params: {}}"
   },
   "settings.startup": {
     "locations": [
-      "src/settings.mjs:758"
+      "src/settings.mjs:789"
     ],
     "context": "+ this.group(say(\"settings.startup\"), this.checkbox(say(\"settings.showHomeOnStartup\"), 'showHomeOnStartup', say(\"settings.showHomeOnStartupNote\")))"
   },
   "settings.staticHandles": {
     "locations": [
-      "src/settings.mjs:783"
+      "src/settings.mjs:814"
     ],
     "context": "this.checkbox(say(\"settings.staticHandles\"), 'builderShowStaticHandles')"
   },
   "settings.theme": {
     "locations": [
-      "src/settings.mjs:744"
+      "src/settings.mjs:775"
     ],
     "context": "const themes = `<div class=\"styk-settings-row styk-settings-block\"><span class=\"styk-settings-label\" ${messageAttributes('settings.theme', {})}>${escape(this.t("
   },
   "settings.timelineMode": {
     "locations": [
-      "src/settings.mjs:747"
+      "src/settings.mjs:778"
     ],
     "context": "const timeline = `<div class=\"styk-settings-row styk-settings-block\"><div class=\"styk-settings-tiles\" data-columns=\"2\" role=\"radiogroup\" aria-label=\"${escape(th"
   },
   "settings.title": {
     "locations": [
       "src/settings.mjs:324",
-      "src/settings.mjs:575"
+      "src/settings.mjs:606"
     ],
     "context": "localizedMarkup(this.dialog, `<header class=\"styk-settings-head\"><img class=\"styk-settings-mark\" src=\"${SYMBOL_URL}\" alt=\"\"><h2 ${messageAttributes(\"settings.ti"
   },
   "settings.touch": {
     "locations": [
-      "src/settings.mjs:754"
+      "src/settings.mjs:785"
     ],
     "context": "const touch = this.group(say(\"settings.touch\"),"
   },
   "settings.touchAuto": {
     "locations": [
-      "src/settings.mjs:755"
+      "src/settings.mjs:786"
     ],
     "context": "this.select(say(\"settings.touchInterface\"), 'touchInterface', [messageTuple(['auto', say(\"settings.touchAuto\")], {1: {key: \"settings.touchAuto\", params: {}}}), "
   },
   "settings.touchInterface": {
     "locations": [
-      "src/settings.mjs:755"
+      "src/settings.mjs:786"
     ],
     "context": "this.select(say(\"settings.touchInterface\"), 'touchInterface', [messageTuple(['auto', say(\"settings.touchAuto\")], {1: {key: \"settings.touchAuto\", params: {}}}), "
   },
   "settings.touchInterfaceNote": {
     "locations": [
-      "src/settings.mjs:755"
+      "src/settings.mjs:786"
     ],
     "context": "this.select(say(\"settings.touchInterface\"), 'touchInterface', [messageTuple(['auto', say(\"settings.touchAuto\")], {1: {key: \"settings.touchAuto\", params: {}}}), "
   },
   "settings.touchOff": {
     "locations": [
-      "src/settings.mjs:755"
+      "src/settings.mjs:786"
     ],
     "context": "this.select(say(\"settings.touchInterface\"), 'touchInterface', [messageTuple(['auto', say(\"settings.touchAuto\")], {1: {key: \"settings.touchAuto\", params: {}}}), "
   },
   "settings.touchOn": {
     "locations": [
-      "src/settings.mjs:755"
+      "src/settings.mjs:786"
     ],
     "context": "this.select(say(\"settings.touchInterface\"), 'touchInterface', [messageTuple(['auto', say(\"settings.touchAuto\")], {1: {key: \"settings.touchAuto\", params: {}}}), "
   },
   "settings.uiScale": {
     "locations": [
-      "src/settings.mjs:709"
+      "src/settings.mjs:740"
     ],
     "context": "return `<div class=\"styk-settings-row styk-settings-scale\"><span class=\"styk-settings-text\"><label class=\"styk-settings-label\" for=\"styk-ui-scale\" ${messageAttr"
   },
   "settings.virtualCamera": {
     "locations": [
-      "src/settings.mjs:780"
+      "src/settings.mjs:811"
     ],
     "context": "this.checkbox(say(\"settings.virtualCamera\"), 'showCamera')"
   },
   "settings.webgpu": {
     "locations": [
-      "src/settings.mjs:788"
+      "src/settings.mjs:819"
     ],
     "context": "this.select(say(\"settings.graphicsMode\"), 'rendererMode', [messageTuple(['auto', say(\"settings.graphicsAuto\")], {1: {key: \"settings.graphicsAuto\", params: {}}})"
   },
   "settings.workspace": {
     "locations": [
-      "src/settings.mjs:752"
+      "src/settings.mjs:783"
     ],
     "context": "? this.group(this.t('settings.workspace'), `<div class=\"styk-settings-row\">${this.text(say(\"settings.panelLayouts\"), say(\"settings.panelLayoutsNote\"))}<button t"
   },
   "settings.zoomCtrlScroll": {
     "locations": [
-      "src/settings.mjs:767"
+      "src/settings.mjs:798"
     ],
     "context": "this.select(say(\"settings.zoomGesture\"), 'canvasZoomGesture', [messageTuple(['ctrl-scroll', say(\"settings.zoomCtrlScroll\")], {1: {key: \"settings.zoomCtrlScroll\""
   },
   "settings.zoomGesture": {
     "locations": [
-      "src/settings.mjs:767"
+      "src/settings.mjs:798"
     ],
     "context": "this.select(say(\"settings.zoomGesture\"), 'canvasZoomGesture', [messageTuple(['ctrl-scroll', say(\"settings.zoomCtrlScroll\")], {1: {key: \"settings.zoomCtrlScroll\""
   },
   "settings.zoomScroll": {
     "locations": [
-      "src/settings.mjs:767"
+      "src/settings.mjs:798"
     ],
     "context": "this.select(say(\"settings.zoomGesture\"), 'canvasZoomGesture', [messageTuple(['ctrl-scroll', say(\"settings.zoomCtrlScroll\")], {1: {key: \"settings.zoomCtrlScroll\""
   },
@@ -36262,7 +36262,7 @@
   },
   "timeline.advanced": {
     "locations": [
-      "src/settings.mjs:748"
+      "src/settings.mjs:779"
     ],
     "context": "[\"advanced\", this.t(\"timeline.advanced\"), this.t(\"settings.advancedDescription\")],"
   },
@@ -36624,7 +36624,7 @@
   },
   "timeline.simple": {
     "locations": [
-      "src/settings.mjs:749"
+      "src/settings.mjs:780"
     ],
     "context": "[\"simple\", this.t(\"timeline.simple\"), this.t(\"settings.simpleDescription\")],"
   },
@@ -36637,7 +36637,7 @@
   "timeline.title": {
     "locations": [
       "src/localization-bindings.mjs:202",
-      "src/settings.mjs:760"
+      "src/settings.mjs:791"
     ],
     "context": "['.timeline-title', { text: 'timeline.title' }],"
   },

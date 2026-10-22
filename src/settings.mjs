@@ -514,9 +514,39 @@ export class EditorSettings {
           const { generatePlan, planToSummary } = await import('./ai-animation.mjs');
           const plan = await generatePlan(prompt, active, { signal: AbortSignal.timeout(30000) });
           const summary = planToSummary(plan);
-          if (outEl) { outEl.hidden = false; outEl.innerHTML = `<pre>${escape(JSON.stringify(plan,null,2))}</pre><p class="styk-settings-hint">${escape(summary)}</p>`; }
+          try { window.__stykAILastPlan = plan; } catch {}
+          if (outEl) { outEl.hidden = false; outEl.innerHTML = `<pre>${escape(JSON.stringify(plan,null,2))}</pre><p class="styk-settings-hint">${escape(summary)}</p><div style="margin-top:8px;display:flex;gap:8px"><button type="button" class="ui-button" data-variant="primary" data-ai-apply>Apply to Timeline</button><button type="button" class="ui-button" data-ai-copy-json>Copy JSON</button></div>`; }
         } catch (e) { this.showError(e); }
         genBtn.disabled = false; genBtn.textContent = this.say('settings.aiGenerate') || 'Generate';
+        return;
+      }
+      const applyBtn = event.target.closest('[data-ai-apply]');
+      if (applyBtn) {
+        event.stopPropagation();
+        const plan = window.__stykAILastPlan;
+        if (!plan) { this.showError(new Error('No plan to apply. Generate first.')); return; }
+        const editor = window.styk?.editor ?? window.stykEditor ?? null;
+        if (!editor) { this.showError(new Error('Editor not found. Open an animation (New) first.')); return; }
+        applyBtn.disabled = true; const prev = applyBtn.textContent; applyBtn.textContent = 'Applying...';
+        (async () => {
+          try {
+            const { applyPlanToEditor } = await import('./ai-animation.mjs');
+            const added = applyPlanToEditor(editor, plan);
+            applyBtn.textContent = `Added ${added} frames ✓`;
+            setTimeout(()=> { applyBtn.textContent = prev; applyBtn.disabled = false; }, 2000);
+            this.close();
+          } catch (e) { this.showError(e); applyBtn.textContent = prev; applyBtn.disabled = false; }
+        })();
+        return;
+      }
+      const copyBtn = event.target.closest('[data-ai-copy-json]');
+      if (copyBtn) {
+        event.stopPropagation();
+        const plan = window.__stykAILastPlan;
+        if (!plan) return;
+        navigator.clipboard?.writeText(JSON.stringify(plan,null,2)).then(()=> {
+          const prev = copyBtn.textContent; copyBtn.textContent = 'Copied ✓'; setTimeout(()=> copyBtn.textContent = prev, 1200);
+        }).catch(e=> this.showError(e));
         return;
       }
       const localBtn = event.target.closest('[data-ai-generate-local]');
@@ -529,7 +559,8 @@ export class EditorSettings {
           const { generatePlanLocal, planToSummary } = await import('./ai-animation.mjs');
           const plan = generatePlanLocal(prompt);
           const summary = planToSummary(plan);
-          if (outEl) { outEl.hidden = false; outEl.innerHTML = `<pre>${escape(JSON.stringify(plan,null,2))}</pre><p class="styk-settings-hint">${escape(summary)} (local, no LLM)</p>`; }
+          try { window.__stykAILastPlan = plan; } catch {}
+          if (outEl) { outEl.hidden = false; outEl.innerHTML = `<pre>${escape(JSON.stringify(plan,null,2))}</pre><p class="styk-settings-hint">${escape(summary)} (local, no LLM)</p><div style="margin-top:8px;display:flex;gap:8px"><button type="button" class="ui-button" data-variant="primary" data-ai-apply>Apply to Timeline</button><button type="button" class="ui-button" data-ai-copy-json>Copy JSON</button></div>`; }
         } catch (e) { this.showError(e); }
         return;
       }

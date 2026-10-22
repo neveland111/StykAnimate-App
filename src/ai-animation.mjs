@@ -175,3 +175,53 @@ export function planToSummary(plan) {
   const lines = plan.sequence.map(s => `${MOTION_LIBRARY[s.move].label} ×${s.frames}f (${s.easing})`);
   return `${plan.title} — ${plan.fps}fps, ${plan.durationFrames}f, ${plan.figures} fig. → ${lines.join(' → ')}`;
 }
+
+export const MOVE_DELTAS = Object.freeze({
+  stand: { x: 0, y: 0 },
+  walk: { x: 22, y: 0 },
+  run: { x: 36, y: 0 },
+  jump: { x: 8, y: -18 },
+  punch: { x: 12, y: 0 },
+  kick: { x: 16, y: 0 },
+  salto: { x: 18, y: -24 },
+  block: { x: -6, y: 0 },
+  hadouken: { x: 10, y: 0 },
+  dance: { x: 10, y: 4 },
+  fall: { x: 6, y: 14 },
+  getup: { x: -6, y: -14 },
+});
+export function moveDelta(move) { return MOVE_DELTAS[move] ?? MOVE_DELTAS.stand; }
+export function applyPlanToEditor(editor, plan, opts = {}) {
+  if (!editor) throw new Error('Editor not available. Open an animation first.');
+  if (!plan?.sequence?.length) throw new Error('Empty plan');
+  const first = editor.frame?.objects?.[0];
+  if (!first) throw new Error('No figure in current frame. Add a stickman first.');
+  const targetUids = editor.selectedUids?.size ? [...editor.selectedUids] : [first.unique_id];
+  if (plan.figures === 2 && editor.frame.objects[1]) targetUids.push(editor.frame.objects[1].unique_id);
+  let framesAdded = 0;
+  const totalSteps = plan.sequence.reduce((a, s) => a + Math.max(1, Math.round(s.frames / 4)), 0);
+  let done = 0;
+  for (const step of plan.sequence) {
+    const keyCount = Math.max(1, Math.round(step.frames / 4));
+    const delta = moveDelta(step.move);
+    const stepX = delta.x / keyCount;
+    const stepY = delta.y / keyCount;
+    for (let k = 0; k < keyCount; k++) {
+      try {
+        editor.addFrame({ blank: false });
+        framesAdded++;
+        for (const uid of targetUids) {
+          const cur = editor.frame.objects.find(o => o.unique_id === uid) ?? editor.frame.objects[0];
+          if (cur) editor.select(cur.unique_id); else editor.select(editor.frame.objects[0]?.unique_id);
+        }
+        editor.moveSelection(stepX, stepY);
+      } catch (e) {
+        try { editor.addFrame(); editor.select(editor.frame.objects[0]?.unique_id); editor.moveSelection(stepX, stepY); framesAdded++; } catch (inner) { throw e; }
+      }
+      done++; opts.onProgress?.(done, totalSteps);
+    }
+    if (step.move === 'stand' && framesAdded > 2) editor.moveSelection(-2, 0);
+  }
+  if (editor.name === 'Untitled' || !editor.name) { try { editor.name = plan.title; } catch {} }
+  return framesAdded;
+}
